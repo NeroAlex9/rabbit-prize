@@ -1,10 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 // Класс сцены вращения колеса
+
+let myImage;
+let state = 'falling'; // Состояние: falling, movingRight, dead
+
 class BeltScene extends Phaser.Scene {
     constructor() {
         super({ key: 'BeltScene' });
     }
+
 
     preload() {
         const assets = [ 'prize'];
@@ -31,7 +36,7 @@ class BeltScene extends Phaser.Scene {
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
 
-        this.prize = this.add.image(90, centerY, 'prize').setScale(0.2);
+        
         this.anims.create({
             key: 'conveer',
             frames: this.anims.generateFrameNumbers('conveer', { start: 0, end: 5 }),
@@ -45,7 +50,41 @@ class BeltScene extends Phaser.Scene {
         // Запускаем анимацию
         mySprite.anims.play('conveer');
 
+        myImage = this.add.image(80, 60, 'prize');
+
+    // Задаем размер изображения (например, 100x100 пикселей)
+        myImage.setDisplaySize(150, 150);
+
     }
+
+    update() {
+        if (state === 'falling') {
+            // Падение изображения сверху вниз
+            myImage.y += 3; // Скорость падения
+    
+            // Проверка, достигло ли изображение определенного значения по Y
+            if (myImage.y >= 500) {
+                state = 'movingRight';
+            }
+        } else if (state === 'movingRight') {
+            // Движение изображения вправо
+            myImage.x += 3; // Скорость движения вправо
+    
+            // Проверка, достигло ли изображение определенного значения по X
+            if (myImage.x >= 500) {
+                state = 'dead';
+            }
+        } else if (state === 'dead') {
+            // Удаление изображения
+            myImage.destroy();
+    
+            // Создание нового изображения и сброс состояния
+            myImage = this.add.image(400, 0, 'myImage');
+            myImage.setDisplaySize(100, 100);
+            state = 'falling';
+        }
+    }
+
 }
 
 // Компонент Game
