@@ -71,16 +71,15 @@ class BeltScene extends Phaser.Scene {
             myImage.x += 3; // Скорость движения вправо
     
             // Проверка, достигло ли изображение определенного значения по X
-            if (myImage.x >= 500) {
+            if (myImage.x >= 550) {
                 state = 'dead';
             }
         } else if (state === 'dead') {
-            // Удаление изображения
-            myImage.destroy();
+           
     
             // Создание нового изображения и сброс состояния
-            myImage = this.add.image(400, 0, 'myImage');
-            myImage.setDisplaySize(100, 100);
+            myImage = this.add.image(80, 60, 'prize');
+            myImage.setDisplaySize(150, 150);
             state = 'falling';
         }
     }
