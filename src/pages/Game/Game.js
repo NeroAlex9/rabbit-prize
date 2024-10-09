@@ -12,6 +12,7 @@ class BeltScene extends Phaser.Scene {
         this.load.image('prize', '/assets/prize.png'); 
         this.load.image('rabbit', '/assets/rabbit.png'); 
         this.load.image('text', '/assets/text.png'); 
+        this.load.image('winner', '/assets/winner.png'); 
     }
 
     create() {
@@ -58,14 +59,18 @@ class BeltScene extends Phaser.Scene {
         this.imageCreationInterval = 1300; // Интервал создания новых коробок в миллисекундах
         this.lastImageCreationTime = 0;
 
+           this.winner = this.add.image(centerX,230, 'winner').setScale(0.35)
+           this.winner.setVisible(false)
+            
         // Добавляем текстовый объект для отображения приза в центре экрана
-        this.prizeText = this.add.text(centerX, centerY, '', {
+        this.prizeText = this.add.text(centerX, 325, '', {
             font: '32px Arial',
             fill: '#ffffff',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
             padding: { x: 20, y: 10 },
             align: 'center',
-            wordWrap: { width: 300 }
+            wordWrap: { width: 300 },
+            stroke: '#000000',
+            strokeThickness: 4
         }).setOrigin(0.5).setVisible(false);
     }
 
@@ -82,6 +87,9 @@ class BeltScene extends Phaser.Scene {
 
     // Функция для отображения приза
     displayPrize(prize) {
+        this.rabbit.setVisible(false)
+        this.text.setVisible(false)
+        this.winner.setVisible(true)
         this.prizeText.setText(prize.name).setVisible(true);
         // Добавляем анимацию появления
         this.tweens.add({
