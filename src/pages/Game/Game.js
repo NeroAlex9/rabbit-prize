@@ -39,7 +39,7 @@ class BeltScene extends Phaser.Scene {
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
 
-        this.rabbit = this.add.image(centerX,300, 'rabbit').setScale(0.2)
+        this.rabbit = this.add.image(centerX,300, 'rabbit').setScale(0.4)
         this.text = this.add.image(centerX,75, 'text')
 
         // Создание анимации конвейера
@@ -171,13 +171,10 @@ const Game = () => {
             height: 700,
             scene: [BeltScene],
             transparent: true,
-            // physics: {
-            //     default: 'arcade',
-            //     arcade: {
-            //         gravity: { y: 0 },
-            //         debug: false
-            //     }
-            // }
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+            },
         };
 
         phaserGame.current = new Phaser.Game(config);
