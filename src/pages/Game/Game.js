@@ -11,6 +11,7 @@ class BeltScene extends Phaser.Scene {
         this.load.spritesheet('conveer', '/assets/conveer.png', { frameWidth: 606, frameHeight: 186 });
         this.load.image('prize', '/assets/prize.png'); 
         this.load.image('rabbit', '/assets/rabbit.png'); 
+        this.load.image('text', '/assets/text.png'); 
     }
 
     create() {
@@ -38,6 +39,7 @@ class BeltScene extends Phaser.Scene {
         const centerY = this.cameras.main.height / 2;
 
         this.rabbit = this.add.image(centerX,300, 'rabbit').setScale(0.2)
+        this.text = this.add.image(centerX,75, 'text')
 
         // Создание анимации конвейера
         this.anims.create({
