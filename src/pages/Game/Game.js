@@ -9,7 +9,8 @@ class BeltScene extends Phaser.Scene {
     preload() {
         // Загрузка спрайтов конвейера и коробки
         this.load.spritesheet('conveer', '/assets/conveer.png', { frameWidth: 606, frameHeight: 186 });
-        this.load.image('prize', '/assets/prize.png'); // Спрайт коробки
+        this.load.image('prize', '/assets/prize.png'); 
+        this.load.image('rabbit', '/assets/rabbit.png'); 
     }
 
     create() {
@@ -36,11 +37,13 @@ class BeltScene extends Phaser.Scene {
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
 
+        this.rabbit = this.add.image(centerX,300, 'rabbit').setScale(0.2)
+
         // Создание анимации конвейера
         this.anims.create({
             key: 'conveer',
             frames: this.anims.generateFrameNumbers('conveer', { start: 0, end: 5 }),
-            frameRate: 10, // Скорость анимации (кадров в секунду)
+            frameRate: 11, // Скорость анимации (кадров в секунду)
             repeat: -1 // Бесконечное повторение
         });
 
@@ -77,7 +80,7 @@ class BeltScene extends Phaser.Scene {
 
     // Функция для отображения приза
     displayPrize(prize) {
-        this.prizeText.setText(`Вы выиграли: ${prize.name}`).setVisible(true);
+        this.prizeText.setText(prize.name).setVisible(true);
         // Добавляем анимацию появления
         this.tweens.add({
             targets: this.prizeText,
@@ -85,28 +88,16 @@ class BeltScene extends Phaser.Scene {
             duration: 500,
             ease: 'Power2'
         });
-
-        // Автоматически скрыть текст через 3 секунды
-        this.time.delayedCall(3000, () => {
-            this.tweens.add({
-                targets: this.prizeText,
-                alpha: { from: 1, to: 0 },
-                duration: 500,
-                ease: 'Power2',
-                onComplete: () => this.prizeText.setVisible(false)
-            });
-            this.canShowPrize = true; // Разрешить показ следующего приза
-        }, [], this);
     }
 
-    update(time, delta) {
+    update(time) {
         if (this.isPaused) {
             return; // Если анимация остановлена, ничего не делаем
         }
 
         // Создаем новую коробку каждые imageCreationInterval миллисекунд
         if (time - this.lastImageCreationTime >= this.imageCreationInterval) {
-            const newBox = this.add.image(-60, 470, 'prize');
+            const newBox = this.add.image(-60, 480, 'prize');
             newBox.setDisplaySize(150, 150);
             newBox.setInteractive(); // Делает коробку интерактивной
 
@@ -127,7 +118,7 @@ class BeltScene extends Phaser.Scene {
         // Двигаем все коробки вправо
         this.images.forEach(image => {
             if (image && image.x !== undefined) {
-                image.x += 3; // Скорость движения вправо
+                image.x += 2.5; // Скорость движения вправо
                 if (image.x >= 550) {
                     image.destroy(); // Удаляем коробку, если она вышла за пределы экрана
                 }
@@ -165,11 +156,11 @@ const Game = () => {
     useEffect(() => {
         const config = {
             type: Phaser.AUTO,
-            backgroundColor: "#1435AD",
             parent: gameRef.current,
             width: 450,
             height: 700,
             scene: [BeltScene],
+            transparent: true,
             // physics: {
             //     default: 'arcade',
             //     arcade: {
